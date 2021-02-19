@@ -1,0 +1,109 @@
+
+
+
+
+@mixin btnHoverProperties($color){
+    content:'';
+        border: 1 $color solid;
+        border-radius:1rem;
+        transition: all 0.3s ease;
+        position: absolute;
+        top:0;
+       left: 0;
+       width: 0;
+       opacity: 0;
+       height: 100%;
+}
+
+@mixin btnHoverEffects($color:$dark){
+    &--btn:after{
+
+        background:$color;
+       @include btnHoverProperties($color);
+    }
+
+    &--btn:hover::after{
+        width: 100%;
+        opacity: 1;
+    }
+}
+
+
+
+@mixin btnTheme($theme-name,$theme-map){
+    .#{$theme-name}{
+
+        @each $section, $map in $theme-map {
+            @if ($section == normal) {
+
+                &--btn{
+                    background:map-get($map, bg);
+                    @if(map-get($map, bg)== $light){
+                        border: 1px map-get($map, color) solid;
+                    } @else{
+                      border:none;
+                    }
+
+                    font-size:0.8rem;
+                    padding: 14px 32px;
+                    border-radius:1rem;
+                    color: $light;
+                    margin-top: 2rem;
+                    cursor: pointer;
+                    position: relative;
+                    transition: all 0.3s;
+                    outline: none;
+                }
+
+                &--btn a{
+                   color: map-get($map, color);
+                   position: relative;
+                z-index: 2;
+               text-decoration: none;;
+                }
+
+            } @else{
+                &--btn:#{$section} a{
+                    color: map-get($map, color);
+
+                 }
+
+                @include btnHoverEffects(map-get($map, bg)) ;
+            }
+        }
+
+
+
+    }
+}
+
+
+$primary:(
+    normal:(
+        bg:$cornflowerBlue,
+        color:$light
+    ),
+    hover:(
+        bg:$blue,
+        color:$light
+    )
+);
+
+$secondary:(
+    normal:(
+        bg:$light,
+        color:$cornflowerBlue
+    ),
+    hover:(
+        bg:$cornflowerBlue,
+        color:$light
+    )
+);
+
+
+    @include btnTheme(primary,$primary) ;
+
+    @include btnTheme(secondary,$secondary) ;
+
+
+
